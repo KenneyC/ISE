@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+#SearchField {
+  min-width:500px;
+}
+
+#searchArea {
+  position: fixed;
+  bottom: 200px;
+  left: 100px;
+  width: 1000px
+}

@@ -1,0 +1,22 @@
+{
+  "name": "image-search-engine",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^3.1.0",
+    "aws-es": "^1.5.3",
+    "aws-sdk": "^2.316.0",
+    "elasticsearch": "^15.1.1",
+    "http-aws-es": "^6.0.0",
+    "react": "^16.5.1",
+    "react-dom": "^16.5.1",
+    "react-material-ui": "^0.0.1",
+    "react-scripts": "1.1.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
