@@ -5,12 +5,11 @@ body {
 }
 
 #SearchField {
-  min-width:500px;
+  width: 100px;
+  min-height: 3px;
 }
 
 #searchArea {
   position: fixed;
   bottom: 200px;
-  left: 100px;
-  width: 1000px
 }
