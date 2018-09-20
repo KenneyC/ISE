@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import TextField from '@material-ui/core/TextField';
-import SearchArea from './searchArea'
+import SearchArea from './searchArea';
+import ImageGrid from './ImageGrid';
+import Button from '@material-ui/core/Button';
 let client = require('./authenticate')
 
 client.ping({
@@ -14,12 +15,21 @@ client.ping({
 });
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.child = React.createRef();
+    }
+
+    flip = () => {
+        this.child.changeImage('./logo.svg');
+    }
+
     render() {
         return (
             <section className="ise">
-                <div id={"searchArea"}>
-                    <SearchArea />
-                </div>
+                <ImageGrid ref={ref => this.child = ref}/>
+                <SearchArea z-index={2}/>
+                <Button onClick={this.flip}>click me</Button>
             </section>
         );
     }
