@@ -25,3 +25,17 @@ body {
   margin-bottom: 10px;
 }
 
+#LabelBar{
+  position: fixed;
+  bottom: 260px;
+}
+
+#CardLabel {
+  height: 100%;
+  width:100%;
+}
+
+.Label {
+  margin: 5px;
+}
+
