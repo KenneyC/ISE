@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "machine learning server",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@tensorflow/tfjs": "^0.13.0",
+    "@tensorflow/tfjs-converter": "^0.6.0",
+    "@tensorflow/tfjs-node": "^0.1.17",
+    "body-parser": "^1.18.3",
+    "canvas": "^1.6.12",
+    "express": "^4.16.3",
+    "jpeg-js": "^0.3.4"
+  },
+  "scripts": {
+    "server": ""
+  }
+}

@@ -6,6 +6,7 @@
     "@material-ui/core": "^3.1.0",
     "aws-es": "^1.5.3",
     "aws-sdk": "^2.316.0",
+    "child-process": "^1.0.2",
     "cors": "^2.8.4",
     "deepdetect-js": "^1.6.8",
     "elasticsearch": "^15.1.1",
