@@ -1,51 +1,64 @@
-const {processImage,toTensor} = require('./classifier.js')
-const express = require('express')
-const fs = require('fs')
-const Canvas = require('canvas')
-const tf = require('@tensorflow/tfjs')
-const tfcon = require('@tensorflow/tfjs-converter')
-require('@tensorflow/tfjs-node')
-
-const port = 8080;
-var model;
-
-/*tfcon.loadFrozenModel('file://./model/tensorflowjs_model.pb','file://./model/weights_manifest.json').then(Fmodel => {
-    model = Fmodel;
-}).catch((err) => {
-    console.log(err)
-})*/
-
-tf.loadModel('http://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json').then(data =>
-{
-    model = data;
-}).catch(err => console.log(err))
-
-const app = express()
-
-app.get('/', (request, response) => {
-    response.send('Hello from Express!')
-})
-
-app.get('/predict', (request, response) => {
-    const can = new Canvas(244,244);
-    const pixels = tf.fromPixels(can);
-    const dimensions = tf.reshape(pixels,[-1,244,244,3])
-    console.log(model.predict(dimensions));
-})
+import express from 'express';
+const tf = require('@tensorflow/tfjs');
+require('@tensorflow/tfjs-node');
+const mobilenet = require('@tensorflow-models/mobilenet');
+const fs = require('fs');
+const jpg = require('jpeg-js');
+const sharp = require('sharp');
+const req = require('request')
 
 
-//loadImage().then( data => {console.log(data)}).catch(err => console.log(err))
+let app = express();
 
+const search = (tag) => {
+    
 
-app.listen(port, (err) => {
-    if (err) {
-        return console.log('something bad happened', err)
+}
+
+const loadModel = async() => {
+    const mn = new mobilenet.MobileNet(1, 1);
+    mn.path = `file://ModelMNv1/model.json`;
+    await mn.load();
+    return mn;
+}
+
+const loadImage = (imageURL) => {
+    let image = fs.readFileSync('bigdoge.jpg');
+    let pixels = jpg.decode(image,true);
+    return pixels;
+}
+
+const preProcessImage = (image) => {
+    let pixels = image.data;
+    let numPixels = image.width * image.height;
+    let values = new Int32Array(numPixels * 3);
+
+    for(let i=0; i< numPixels;i++){
+        for(let channel =0; channel<3;channel++){
+            values[i * 3 + channel] = pixels[i * 4 + channel];
+        }
     }
+    let shape = [image.width, image.height, 3];
+    let input = tf.tensor3d(values,shape,"int32");
 
-    console.log(`server is listening on ${port}`)
+    return input;
+}
+
+const classify = async (imageURL) => {
+    let model = await loadModel();
+    let image = loadImage();
+    let input = preProcessImage(image);
+    let prediction = await model.classify(input);
+    return prediction;
+}
+
+classify().then(data => console.log(data));
+
+app.use(express.static('public'));
+
+app.get('/', function (req, res) {
+    res.send('Hello World')
 })
 
 
-
-
-
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
