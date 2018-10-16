@@ -3,56 +3,45 @@ const tf = require('@tensorflow/tfjs');
 require('@tensorflow/tfjs-node');
 const mobilenet = require('@tensorflow-models/mobilenet');
 const fs = require('fs');
+const lineReader = require('readline-specific')
 const jpg = require('jpeg-js');
 const sharp = require('sharp');
-const req = require('request')
+const req = require('request').defaults({encoding: null});
 
+const {readALine,findTopTen, searchURL} = require('./backend');
 
 let app = express();
+let model;
+let cache = {};
 
-const search = (tag) => {
-    
-
-}
-
-const loadModel = async() => {
-    const mn = new mobilenet.MobileNet(1, 1);
-    mn.path = `file://ModelMNv1/model.json`;
-    await mn.load();
-    return mn;
-}
-
-const loadImage = (imageURL) => {
-    let image = fs.readFileSync('bigdoge.jpg');
-    let pixels = jpg.decode(image,true);
-    return pixels;
-}
-
-const preProcessImage = (image) => {
-    let pixels = image.data;
-    let numPixels = image.width * image.height;
-    let values = new Int32Array(numPixels * 3);
-
-    for(let i=0; i< numPixels;i++){
-        for(let channel =0; channel<3;channel++){
-            values[i * 3 + channel] = pixels[i * 4 + channel];
+const addToCache = (results) => {
+    for(let i =0; i<results.length;i++){
+        if(results[i] != undefined) {
+            let tags = results[i]['data'][0]['className'].split(", ");
+            for(let predict=0; predict<3;predict++) {
+                for (let j = 0; j < tags.length; j++) {
+                    cache[tags[j]] = {url: results[predict]['url'], probability: results[predict]['data'][0]['probability']};
+                }
+            }
         }
     }
-    let shape = [image.width, image.height, 3];
-    let input = tf.tensor3d(values,shape,"int32");
-
-    return input;
 }
 
-const classify = async (imageURL) => {
-    let model = await loadModel();
-    let image = loadImage();
-    let input = preProcessImage(image);
-    let prediction = await model.classify(input);
-    return prediction;
-}
+findTopTen().then(data => {
+    let promises = [];
+    for(let string of data) {
+        promises.push(searchURL(string));
+    }
+    Promise.all(promises).then(data => {
+        addToCache(data)
+    }).catch((err) => {console.log(err)})
+});
 
-classify().then(data => console.log(data));
+
+app.get('/', function (req,res) {
+
+
+})
 
 app.use(express.static('public'));
 
@@ -61,4 +50,6 @@ app.get('/', function (req, res) {
 })
 
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => {
+    console.log('Example app listening on port 3000!')
+});

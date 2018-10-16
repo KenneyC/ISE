@@ -11,6 +11,7 @@
     "babel-register": "^6.26.0",
     "canvas": "^1.6.13",
     "jpeg-js": "^0.3.4",
+    "readline-specific": "^1.0.4",
     "request": "^2.88.0",
     "sharp": "^0.21.0"
   }
