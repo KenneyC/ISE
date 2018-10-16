@@ -11,30 +11,9 @@ const req = require('request').defaults({encoding: null});
 const {readALine,findTopTen, searchURL} = require('./backend');
 
 let app = express();
-let model;
-let cache = {};
 
-const addToCache = (results) => {
-    for(let i =0; i<results.length;i++){
-        if(results[i] != undefined) {
-            let tags = results[i]['data'][0]['className'].split(", ");
-            for(let predict=0; predict<3;predict++) {
-                for (let j = 0; j < tags.length; j++) {
-                    cache[tags[j]] = {url: results[predict]['url'], probability: results[predict]['data'][0]['probability']};
-                }
-            }
-        }
-    }
-}
-
-findTopTen().then(data => {
-    let promises = [];
-    for(let string of data) {
-        promises.push(searchURL(string));
-    }
-    Promise.all(promises).then(data => {
-        addToCache(data)
-    }).catch((err) => {console.log(err)})
+findTopTen('coral reef').then(data => {
+    console.log(data);
 });
 
 
