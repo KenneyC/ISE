@@ -34,6 +34,12 @@ export default class SearchArea extends Component {
 
     }
 
+    getTags = () => {
+        let values = [];
+        this.state.chipData.map(data => values.push(data.value));
+        return values;
+    }
+
     render() {
         return (
             <div>

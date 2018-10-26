@@ -17,19 +17,27 @@ client.ping({
 class App extends Component {
     constructor(props) {
         super(props);
-        this.child = React.createRef();
+        this.grid = React.createRef();
+        this.searchArea = React.createRef();
     }
 
     flip = () => {
-        this.child.changeImage('./logo.svg');
+        this.grid.changeImage('./logo.svg');
+    }
+
+    search = async () => {
+        let tags = this.searchArea.getTags();
+        let url = tags.join(';');
+        let results = await fetch('/tags/'+url);
+        console.log(results);
     }
 
     render() {
         return (
             <section className="ise">
-                <ImageGrid ref={ref => this.child = ref}/>
-                <SearchArea z-index={2}/>
-                <Button onClick={this.flip}>click me</Button>
+                <ImageGrid ref={ref => this.grid = ref}/>
+                <SearchArea z-index={2} ref={ref => this.searchArea = ref}/>
+                <Button onClick={this.search}>click me</Button>
             </section>
         );
     }
