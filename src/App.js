@@ -4,16 +4,6 @@ import ImageGrid from './ImageGrid';
 import Button from '@material-ui/core/Button';
 let client = require('./authenticate')
 
-client.ping({
-    requestTimeout: 30000,
-}, function (error) {
-    if (error) {
-        console.error('elasticsearch cluster is down!');
-    } else {
-        console.log('All is well');
-    }
-});
-
 class App extends Component {
     constructor(props) {
         super(props);
@@ -21,15 +11,24 @@ class App extends Component {
         this.searchArea = React.createRef();
     }
 
-    flip = () => {
-        this.grid.changeImage('./logo.svg');
+    flip = (url) => {
+        this.grid.changeImage(url);
     }
 
     search = async () => {
         let tags = this.searchArea.getTags();
         let url = tags.join(';');
-        let results = await fetch('/tags/'+url);
-        console.log(results);
+        let results;
+        await fetch('/tags/'+url).then(data=> {
+            return data.json();
+        }).then(data => {
+            results = data;
+            console.log(data);
+        });
+
+        for(let i=0;i<results.length; i++) {
+            this.flip(results[i]);
+        }
     }
 
     render() {

@@ -7,14 +7,21 @@ export default class ImageGrid extends Component {
     constructor() {
         super();
         this.children = {};
+        this.number =0;
         for(let i =0; i<12;i++) {
             this.children[i] = React.createRef();
         }
     }
 
     changeImage = (image) => {
-        let child = Math.floor(Math.random() * (12));
+        let child;
+        if(this.number < 12) {
+            child = this.number;
+        } else {
+            child = Math.floor(Math.random() * (12));
+        }
         this.children[child].current.changeImage(image);
+        this.number++;
     }
 
     render() {

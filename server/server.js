@@ -1,12 +1,6 @@
 import express from 'express';
 import {findTopTen} from "./backend";
-const tf = require('@tensorflow/tfjs');
 require('@tensorflow/tfjs-node');
-const mobilenet = require('@tensorflow-models/mobilenet');
-const fs = require('fs');
-const lineReader = require('readline-specific')
-const jpg = require('jpeg-js');
-const sharp = require('sharp');
 const req = require('request').defaults({encoding: null});
 
 let app = express();
@@ -32,5 +26,5 @@ app.get('/tags/:tags', function (req, res) {
 
 
 app.listen(3000, () => {
-    console.log('Example app listening on port 3000!')
+    console.log('Example app listening on port 3001!')
 });

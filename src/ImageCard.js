@@ -16,11 +16,19 @@ export default class ImageCard extends Component {
         this.button = React.createRef()
     }
 
-    changeImage = () => {
-        if(this.state.isFlipped == false) {
-            this.setState({isFlipped: true});
+    changeImage = (url) => {
+        if(this.image1 == null) {
+            this.image1 = url;
+            this.image2 = url;
+            this.setState({isFlipped: true})
         } else {
-            this.setState({isFlipped: false});
+            if (this.state.isFlipped == true) {
+                this.image1 = url;
+                this.setState({isFlipped: false});
+            } else {
+                this.image2 = url;
+                this.setState({isFlipped: true});
+            }
         }
     }
 
@@ -30,10 +38,14 @@ export default class ImageCard extends Component {
                 <ReactFlipCard
                     isFlipped={this.state.isFlipped}>
                     <div key="front">
-                        <Card className={'ImageCard'}></Card>
+                        <Card className={'ImageCard'}>
+                            <img src={this.image1}/>
+                        </Card>
                     </div>
                     <div key="back">
-                        <Card className={'ImageCard'}></Card>
+                        <Card className={'ImageCard'}>
+                            <img src={this.image2}/>
+                        </Card>
                     </div>
                 </ReactFlipCard>
             </div>
